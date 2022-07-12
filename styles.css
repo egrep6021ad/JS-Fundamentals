@@ -1,0 +1,85 @@
+
+/* All elements */
+html {
+    font-family: sans-serif;
+    overflow-x: hidden;
+    background-color: aliceblue;
+}
+.nav {
+    height:10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+    background-color: #444;
+    color: white;
+    border-top-right-radius:10px;
+    border-top-left-radius: 10px;
+}
+.nav > a {
+    padding:2% 0 2% 0;
+    margin: 0 10% 0 10%;
+    color:white;
+    text-decoration: none;
+}
+
+
+/*HomeScreen*/
+.home_container {
+    text-align: center;
+    width: 70%;
+}
+.home_container > h2{
+    text-decoration: underline;
+
+}
+
+/*Payroll*/
+.main_container {
+    height:100vh;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   background-color: white;
+}
+.table_container {
+    width:80%;
+    height: fit-content;
+    max-height: 50%;
+    overflow-y: scroll;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #444;
+}
+table {
+    background-color: aliceblue;
+    width: 100%;
+    text-align: center;
+    padding:5%;
+}
+th {
+    text-decoration: underline;
+}
+
+
+/* Game */
+div#show_game{
+    width:65%;
+    height:60%;
+    background-color: #444;
+}
+img{
+    height:16%;
+    width:25%;
+    animation: hide_tile 3s backwards;
+}
+.hide_image{
+    opacity: 0;
+}
+.show_image{
+    
+}
