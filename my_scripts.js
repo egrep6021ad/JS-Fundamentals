@@ -33,18 +33,32 @@ const show_table = () => {
 
 
 
-
-
 // GAME: 
 // Function: --> Gameboard
 var checked = null;  
+var matches = new Map()
 const show_game = () => {
     const n = prompt("How many tiles would you like (8, 10, or 12")
     checked = n;
+    show_timer(n) // Start time once shuffled
     var ordered_images = []; // Init array for images
     for( i = 1; i<=n ; i++){ // While i < n; 
-        for(j = 1; j <= 2 ; j++) // Add the images to the array
+        temp = [0,0]
+        matches.set(i, temp)
+        for(j = 1; j <= 2 ; j++){ // Add the images to the array
             ordered_images = [...ordered_images, "<img src='./images/match"+i+""+j+".webp'/>"]
+            // Add pairs of images (matches) to map:
+            if(j == 1) {
+                temp = matches.get(i)
+                temp[0] = "<img src='./images/match"+i+""+j+".webp'/>"
+                matches.set(i, temp)
+            }
+            else{
+                temp = matches.get(i)
+                temp[1] = "<img src='./images/match"+i+""+j+".webp'/>"
+                matches.set(i, temp)
+            }
+        }
     }
     // Shuffle the images
     ordered_images = shuffle(ordered_images)
@@ -54,6 +68,14 @@ const show_game = () => {
         output += ordered_images[i] 
     // Write the images to the UI 
     document.getElementById("show_game").innerHTML = output;
+    var game_time = 0;
+    if(n == 8) game_time = 12000
+    else if(n == 10) game_time = 150000
+    else if(n == 12) game_time = 180000
+    const game_timer = setTimeout(()=>{
+        document.getElementById("show_game").innerHTML = " <h1>Your Score: " + game_score + "!<br>Great Job!</h1><center><img id='winner' src='./images/winner.webp'></center>";
+    }, game_time)
+
 }
 
 // Function: array[unshuffled] -> array[shuffled]
@@ -65,69 +87,83 @@ const shuffle = (arg) => {
       arg[j] = curr
     } 
     console.log(arg.length)
-    show_timer()
     return arg;
   }
 
  // Function: --> UI timer
-const show_timer = () => {
+var image_map = new Map()
+const show_timer = (n) => {
     var time = 0; 
+    var limit = 0;
+    // The allowed ammount of time user sees images before flipping over tiles
+    if(n == 8) limit = 3
+    else if(n == 10) limit = 5
+    else if(n == 12) limit = 8
     const timer = setInterval(() => {
         time ++
-        if(time >= 3){ // When the timer is up, hide the images:
+        if(time > limit){ // When the timer is up, hide the images:
             let arr = document.getElementsByTagName("img")
             for(i = 0 ; i < arr.length ; i++) {
+                // Set up a map for original image retrieval
+                image_map.set(i , arr[i].getAttribute("src")) 
                 arr[i].setAttribute("src", "./images/stars.webp") // Hide the images
-                arr[i].setAttribute("id", i+1) // Give the images id's [1-n] 
+                arr[i].setAttribute("id", i) // Give the images id's [1-n] 
                 // Set the click function for each image with its id
-                arr[i].setAttribute("onclick", "handle_click("+(i+1)+")") 
-            } clearInterval(timer)
+                arr[i].setAttribute("onclick", "handle_click("+(i)+")") 
+            } 
+            clearInterval(timer)
+            time = ""
         }
-        document.getElementById("show_timer").innerHTML = time;
+        document.getElementById("show_timer").innerHTML = "<h1>"+time+"</h1>";
     }, 1000);
 }
 
-// click handler
-var checked_boxes = new Array(checked+1).fill(false);
+// Variables need to persist more than on click:
+var checked_boxes = []
+var checked_ids = []
+var game_score = 0
 const handle_click = async (id) => {
-    
-   await document.getElementById(id).setAttribute("src","./images/match"+(id-4)+"1.webp")
-    if((checked_boxes[id] && checked_boxes[id+1])|| (checked_boxes[id] && checked_boxes[id-1])){
-        temp = []
-        for( i = 0; i < checked_boxes.length; i++){
-            if (checked_boxes[i] == true) temp = [...temp, i]
+    // Fetch original image from map using the html "id" attribute
+   await document.getElementById(id).setAttribute("src",image_map.get(id))
+   // Check if the images in checked_matches are a match
+   checked_boxes = [...checked_boxes, image_map.get(id)] 
+   checked_ids = [...checked_ids, id]
+   if(checked_boxes.length == 2 ){
+    // Theyve already selected 2 images, disable clicking:
+    await document.getElementsByTagName("body")[0].setAttribute("class","disable_clicks")
+    for(let [k,v] of matches){
+        let s = v[0] +" "+ v[1]
+        // If images are a match, hide them and increase score
+        if(s.includes(checked_boxes[0]) && s.includes(checked_boxes[1])){
+            hide_image(checked_ids)
+            checked_ids =[]
+            checked_boxes = []
+            game_score += 1
+            // Show updated score
+            document.getElementById("show_score").innerHTML = "<h1>Current Score: "+game_score+"</h1>";
+            // Resume clicking:
+            await document.getElementsByTagName("body")[0].setAttribute("class","")
+            // Break out of function
+            return
         }
-        hide_image(temp)
     }
-    else
-        checked_boxes[id] = true
-    var count = 0
-    for(i = 0 ; i< checked_boxes.length; i++){
-        if(checked_boxes[i] == true) count++
-        if (count >=2 )
-            new Array(checked+1).fill(false);
-    }
-
+    // Other wise you have 2 images selected that dont match:
+    const change_to_stars = setTimeout(()=>{
+        document.getElementById(checked_ids[0]).setAttribute("src", "./images/stars.webp")
+        document.getElementById(checked_ids[1]).setAttribute("src", "./images/stars.webp")
+        checked_boxes = []
+        checked_ids = []
+        // Resume clicking
+        document.getElementsByTagName("body")[0].setAttribute("class","")
+    },1500)
+   }
 }
 
-// Function: html <img> "id" --> original image
-
 const hide_image = (arg) => {
-    let temp = []
-    for( i = 0 ; i < arg.length ; i++){
-        let doc = document.getElementById(arg[i])
-        temp = [...temp, doc]
-    }
-   for( i = 0; i < temp.length; i++){
-    let id = temp[i].getAttribute("id")
-    temp[i].setAttribute("src","./images/match"+id+"1.webp")
-    temp[i+1].setAttribute("src","./images/match"+id+"2.webp")
-    break;
-   }
     const timer = setTimeout(() => {
-        doc.setAttribute("class", "hide_image")
-    }, 3000);
-    //doc.setAttribute("class", "hide_image")
+        for( i = 0 ; i < arg.length; i++)
+         document.getElementById(arg[i]).setAttribute("class","hide_image")
+    }, 1500);
 }
 
   
