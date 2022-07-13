@@ -1,6 +1,4 @@
-
 // GAME: 
-
 // Inital screen load:
 window.onload = () => {
     const start_button  = document.getElementById("start_button")
@@ -18,10 +16,10 @@ const display_directions = () => {
 // Function: --> Gameboard
 var matches = new Map()
 var n = null
-var game_time = 0;
+var game_time = 0
 const show_game = () => {
     // Get rid of the dialog box:
-    document.getElementById("dialog_container").innerHTML = "";
+    document.getElementById("dialog_container").innerHTML = ""
     // Get user input:
     n = prompt("How many tiles would you like (8, 10, or 12)?")
     // Start Image visibility timer and hide the images:
@@ -54,10 +52,9 @@ const show_game = () => {
     for( i = 0 ; i < ordered_images.length; i++)
         output += ordered_images[i] 
     // Write the images to the UI 
-    document.getElementById("show_game").innerHTML = output;
+    document.getElementById("show_game").innerHTML = output
     
     // Set gameplay timer: 
-
     if(n == 8) game_time = 120 + 3 // Game timer max = 120 seconds + 3 sec of viewing
     else if(n == 10) game_time = 150  + 5 // 150 seconds
     else if(n == 12) game_time = 180 + 8 // 180 seconds
@@ -65,15 +62,14 @@ const show_game = () => {
         document.getElementById("show_timer").innerHTML = "<h1>Timer: " + game_time
         if(game_time <= 0){
              document.getElementById("show_timer").innerHTML = ""
-             document.getElementById("show_game").innerHTML = " <h1>Your Score: " + game_score + "!<br>Great Job!</h1><center><img id='winner' src='./images/winner.webp'></center>";
+             document.getElementById("show_game").innerHTML = " <h1>Your Score: " + game_score + "!<br>Great Job!</h1><center><img id='winner' src='./images/winner.webp'></center>"
              clearInterval(curr_time)
         } 
         game_time--
     }, 1000)
-
 }
 
-// Variables need to persist more than on click:
+// Variables that need to persist more than on click:
 var checked_boxes = []
 var checked_ids = []
 var game_score = 0
@@ -86,7 +82,6 @@ const handle_click = async (id) => {
    if(checked_boxes.length == 2 ){
     // Theyve already selected 2 images, disable clicking:
     await document.getElementsByTagName("main")[0].setAttribute("class","disable_clicks")
-
     for(let [k,v] of matches){
         let s = v[0] +" "+ v[1]
         // If images are a match, hide them and increase score
@@ -98,14 +93,14 @@ const handle_click = async (id) => {
                 game_time = -1
                 document.getElementById("show_score").innerHTML = ""
                 document.getElementsByTagName("main")[0].setAttribute("class"," ")
-                document.getElementById("show_game").innerHTML = " <h1>Your Score: " + game_score + "!<br>Great Job!</h1><center><img id='winner' src='./images/winner.webp'></center>";
+                document.getElementById("show_game").innerHTML = " <h1>Your Score: " + game_score + "!<br>Great Job!</h1><center><img id='winner' src='./images/winner.webp'></center>"
                 return
             }
             hide_image(checked_ids)
             checked_ids =[]
             checked_boxes = []
             // Show updated score
-            document.getElementById("show_score").innerHTML = "<h1>Current Score: "+game_score+"</h1>";
+            document.getElementById("show_score").innerHTML = "<h1>Current Score: "+game_score+"</h1>"
             // Resume clicking:
             setTimeout(()=>{
                 document.getElementsByTagName("main")[0].setAttribute("class","")
@@ -156,7 +151,7 @@ const handle_click = async (id) => {
 // Helper Function:: array[unshuffled] -> array[shuffled]
 const shuffle = (arg) => {
     for(i = 0; i < arg.length; i++){ // For each element in arr
-      j = Math.floor(Math.random() * arg.length); // New random index
+      j = (Math.floor(Math.random() * arg.length)) // New random index
       curr = arg[i]  
       arg[i] = arg[j] // Swap current index with random index
       arg[j] = curr

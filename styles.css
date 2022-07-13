@@ -1,4 +1,7 @@
-
+@font-face {
+    font-family: "Lobster";
+    src: url("./LobsterTwo-BoldItalic.ttf");
+}
 /* All elements */
 html {
     font-family: sans-serif;
@@ -32,6 +35,9 @@ html {
 }
 .home_container > h2{
     text-decoration: underline;
+    font-family: "Lobster";
+    letter-spacing: 1px;
+    font-size: 200%;
 }
 
 
