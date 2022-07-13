@@ -32,8 +32,9 @@ html {
 }
 .home_container > h2{
     text-decoration: underline;
-
 }
+
+
 
 /*Payroll*/
 .main_container {
@@ -43,7 +44,7 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-   background-color: white;
+    background-color: white;
 }
 .table_container {
     width:80%;
@@ -66,13 +67,16 @@ th {
 }
 
 
+@keyframes tile_anmiation {
+    from{opacity: 1; transform: rotate(0);}
+    to{opacity: 0.3; transform: rotate(360deg); }
+}
 /* Game */
 
 div#show_game{
     width:65%;
     height:60%;
     align-items: center;
-    
 }
 h1{
     width: 100%;
@@ -81,7 +85,6 @@ h1{
 img{
     height:16%;
     width:25%;
-    animation: hide_tile 3s backwards;
 }
 img#winner{
     box-shadow:4px 4px #444;
@@ -90,12 +93,31 @@ img#winner{
     width:10%;
 }
 .hide_image{
-    opacity: 0;
+    pointer-events: none;
+    animation: tile_anmiation 1s forwards
 }
 .disable_clicks{
-    pointer-events:none;
-    opacity:0.7;
+    pointer-events: none;
+    opacity:0.3;
 }
 div#show_score{
     text-align: center;
+}
+dialog{
+    text-align: center;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 1px 2px #444;
+    background-color: aliceblue;
+}
+button{
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 1px 2px #444;
+    padding:2%;
+    margin:2%;
+    background-color: whitesmoke;
+}
+button:hover{
+    cursor: pointer;
 }
