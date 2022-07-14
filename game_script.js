@@ -9,7 +9,7 @@ window.onload = () => {
 
 // Directions about how to play:
 const display_directions = () => {
-    const directions = "When you press \"start\" you will be able to input an 8, a 10, or a 12. Depending on which, you will have either 3, 5, or 8 seconds to memorize the images. Then depending on how many images chose you will have either 120 seconds, 150 seconds or 180 seconds to get as many matches as possible. Good luck!"
+    const directions = "When you press \"start\" you will be able to input an 8, a 10, or a 12.<br> Depending on which, you will have either 3, 5, or 8 seconds to memorize the images.<br> Then depending on how many images you chose, you will have either 120 seconds, 150 seconds or 180 seconds respectively, to get as many matches as possible.<br> Good luck!"
     document.getElementById("welcome").innerHTML = directions
 }
 
@@ -104,7 +104,7 @@ const handle_click = async (id) => {
             // Resume clicking:
             setTimeout(()=>{
                 document.getElementsByTagName("main")[0].setAttribute("class","")
-            },1000)
+            },1500)
             // Break out of function
             return 
         }
